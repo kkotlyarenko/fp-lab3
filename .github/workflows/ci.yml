@@ -1,0 +1,32 @@
+name: OCaml CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 5
+          opam-depext: true
+
+      - name: Install dependencies
+        run: |
+          opam install . --deps-only --with-test -y
+          opam install ocamlformat -y
+
+      - name: Build (@all)
+        run: |
+          opam exec -- dune build @all
+
+      - name: Test
+        run: |
+          opam exec -- dune runtest --no-buffer

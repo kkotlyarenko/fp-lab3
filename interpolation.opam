@@ -1,0 +1,14 @@
+opam-version: "2.0"
+name: "interpolation"
+version: "1.0.0"
+synopsis: "Stream-based interpolation tool"
+maintainer: "kkotlyarenko"
+authors: "kkotlyarenko"
+depends: [
+  "ocaml" {>= "4.14.0"}
+  "dune" {>= "3.0"}
+  "alcotest" {with-test}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
