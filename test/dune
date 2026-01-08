@@ -1,3 +1,6 @@
 (tests
  (names test_linear test_newton test_io test_stream)
  (libraries interpolation_lib alcotest))
+
+(cram
+ (deps %{bin:interpolation}))

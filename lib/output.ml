@@ -11,8 +11,3 @@ let format_float f =
   in
   String.sub s 0 (find_end (len - 1))
 
-let print_point algorithm (x, y) =
-  Printf.printf "%s: %s\t%s\n%!" algorithm (format_float x) (format_float y)
-
-let print_points algorithm points =
-  List.iter (print_point algorithm) points

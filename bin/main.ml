@@ -52,6 +52,32 @@ let parse_args () =
   let algorithms = if algorithms = [] then [Interpolation.Linear] else algorithms in
   { Interpolation.algorithms; step; newton_points }
 
+let print_point algorithm (x, y) =
+  Printf.printf "%s: %s\t%s\n%!" algorithm (Output.format_float x) (Output.format_float y)
+
+let print_points algorithm points =
+  List.iter (print_point algorithm) points
+
+let run_streaming config =
+  let read_line_opt () =
+    try Some (input_line stdin) with End_of_file -> None
+  in
+  let rec loop state =
+    match read_line_opt () with
+    | None ->
+      let outs = Interpolation.finalize config state in
+      List.iter (fun (name, pts) -> print_points name pts) outs
+    | Some line ->
+      (match Input.parse_line line with
+       | None -> loop state
+       | Some point ->
+         let state', outs = Interpolation.process_point config state point in
+         List.iter (fun (name, pts) -> print_points name pts) outs;
+         loop state')
+  in
+  loop Interpolation.initial_state
+
 let () =
   let config = parse_args () in
-  Interpolation.run config
+  run_streaming config
+

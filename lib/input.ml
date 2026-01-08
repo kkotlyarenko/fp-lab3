@@ -26,14 +26,3 @@ let parse_line line =
     in
     try_separators separators
 
-let read_line_opt () =
-  try Some (input_line stdin)
-  with End_of_file -> None
-
-let rec input_point_seq () =
-  match read_line_opt () with
-  | None -> Seq.Nil
-  | Some line ->
-    match parse_line line with
-    | Some point -> Seq.Cons (point, input_point_seq)
-    | None -> input_point_seq ()
