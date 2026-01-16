@@ -3,38 +3,38 @@ open Interpolation_lib
 let eps = 1e-6
 
 let test_parse_line_csv_semicolon () =
-  match Input.parse_line "1.5;2.5" with
+  match Parsers.parse_line "1.5;2.5" with
   | Some (x, y) ->
     Alcotest.(check (float eps)) "x" 1.5 x;
     Alcotest.(check (float eps)) "y" 2.5 y
   | None -> Alcotest.fail "expected Some point"
 
 let test_parse_line_csv_comma () =
-  match Input.parse_line "1.5,2.5" with
+  match Parsers.parse_line "1.5,2.5" with
   | Some (x, y) ->
     Alcotest.(check (float eps)) "x" 1.5 x;
     Alcotest.(check (float eps)) "y" 2.5 y
   | None -> Alcotest.fail "expected Some point"
 
 let test_parse_line_tab () =
-  match Input.parse_line "1\t2" with
+  match Parsers.parse_line "1\t2" with
   | Some (x, y) ->
     Alcotest.(check (float eps)) "x" 1.0 x;
     Alcotest.(check (float eps)) "y" 2.0 y
   | None -> Alcotest.fail "expected Some point"
 
 let test_parse_line_space () =
-  match Input.parse_line "  1   2  " with
+  match Parsers.parse_line "  1   2  " with
   | Some (x, y) ->
     Alcotest.(check (float eps)) "x" 1.0 x;
     Alcotest.(check (float eps)) "y" 2.0 y
   | None -> Alcotest.fail "expected Some point"
 
 let test_parse_line_header_is_ignored () =
-  Alcotest.(check (option (pair (float eps) (float eps)))) "header" None (Input.parse_line "x;y")
+  Alcotest.(check (option (pair (float eps) (float eps)))) "header" None (Parsers.parse_line "x;y")
 
 let test_parse_line_empty_is_ignored () =
-  Alcotest.(check (option (pair (float eps) (float eps)))) "empty" None (Input.parse_line "   ")
+  Alcotest.(check (option (pair (float eps) (float eps)))) "empty" None (Parsers.parse_line "   ")
 
 let test_format_float_trims_zeros () =
   Alcotest.(check string) "1.500000 -> 1.5" "1.5" (Output.format_float 1.5)
